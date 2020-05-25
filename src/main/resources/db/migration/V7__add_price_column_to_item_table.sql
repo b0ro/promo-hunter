@@ -1,0 +1,1 @@
+ALTER TABLE `item` ADD `price` DECIMAL(13, 4) NOT NULL;
