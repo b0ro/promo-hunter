@@ -7,6 +7,7 @@ plugins {
 group = 'org.boro'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
+targetCompatibility = '11'
 
 configurations {
     developmentOnly
