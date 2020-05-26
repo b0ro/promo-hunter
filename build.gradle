@@ -1,5 +1,5 @@
 plugins {
-    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'org.springframework.boot' version '2.3.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
     id 'java'
 }
@@ -21,6 +21,10 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+}
+ext {
+    set('wavefrontVersion', "2.0.0-RC1")
 }
 
 // @todo update to Spring Boot 2.3
@@ -37,19 +41,39 @@ repositories {
 // @todo setup port
 // @todo check properties from seachange project
 dependencies {
+    // COMMON COMPONENTS
+    // base services for management, configuration and discovery
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.flywaydb:flyway-core'
+
+    // support web/api
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    compileOnly 'org.projectlombok:lombok'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // COMMON COMPONENTS
+    // support database access
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.flywaydb:flyway-core'
     compile 'org.mariadb.jdbc:mariadb-java-client'
+
+    // support web scraping
     compile 'org.jsoup:jsoup:1.13.1'
+
+    // DEVELOPMENT HELPERS
+    // use for development
+    compileOnly 'org.projectlombok:lombok'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
+
+    // TESTING
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "com.wavefront:wavefront-spring-boot-bom:${wavefrontVersion}"
     }
 }
 
