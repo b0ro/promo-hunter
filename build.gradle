@@ -23,19 +23,17 @@ repositories {
     mavenCentral()
 }
 
-// @todo update to Spring Boot 2.3
-// @todo add comments and sections in build gradle
+// @todo check properties from seachange project
+// @todo add tests
+// @todo add rest error advice
+// @todo setup port
 // @todo add docker and docker-compose support with MariaDb image
 // @todo refactor to hexagonal architecture
-// @todo add tests
+// @todo improve item, source, bundle validation
 // @todo refactor ItemPriceSynchronizer to use Stream instead of List (optional)
 // @todo add notification with the prices of sets? or when price changed or reached specific price
-// @todo add rest error advice
-// @todo improve item, source, bundle validation
 // @todo add property sources and property metadata file
 // @todo add ci/cd support
-// @todo setup port
-// @todo check properties from seachange project
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
