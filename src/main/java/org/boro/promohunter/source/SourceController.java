@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/sources")
+@RequestMapping("/sources")
 class SourceController {
 
     private final SourceService service;

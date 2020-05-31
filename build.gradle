@@ -9,6 +9,11 @@ version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
 targetCompatibility = '11'
 
+// make application executable jar to register it as linux service
+bootJar {
+    launchScript()
+}
+
 configurations {
     developmentOnly
     runtimeClasspath {
@@ -30,7 +35,6 @@ ext {
 // @todo check properties from seachange project
 // @todo add tests
 // @todo add rest error advice
-// @todo setup port
 // @todo add docker and docker-compose support with MariaDb image
 // @todo refactor to hexagonal architecture
 // @todo improve item, source, bundle validation

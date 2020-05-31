@@ -19,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/bundles")
+@RequestMapping("/bundles")
 class BundleController {
 
     private final BundleService service;
