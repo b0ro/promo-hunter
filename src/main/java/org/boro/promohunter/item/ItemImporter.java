@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class ItemImporter {
+public class ItemImporter {
 
     public Optional<Item> importItem(String url, Source source) {
         try {
@@ -25,8 +25,11 @@ class ItemImporter {
             // @todo throw exception when cannot extract
             extract(document, source.getNameSelector()).ifPresent(item::setName);
             extract(document, source.getDescriptionSelector()).ifPresent(item::setDescription);
-            extract(document, source.getPriceSelector()).ifPresent(priceText ->
-                    item.setPrice(new BigDecimal(priceText)));
+            extract(document, source.getPriceSelector())
+                    .map(s -> s.replace(",", "."))
+                    .map(s -> s.replaceAll("[^\\d.]", ""))
+                    .filter(s -> !s.isBlank())
+                    .ifPresent(priceText -> item.setPrice(new BigDecimal(priceText)));
 
             return Optional.of(item);
         } catch (IOException exception) {

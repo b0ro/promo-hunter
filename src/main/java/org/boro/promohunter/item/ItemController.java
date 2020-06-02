@@ -23,6 +23,12 @@ import java.util.List;
 class ItemController {
 
     private final ItemService service;
+    private final ItemImporter importer;
+
+    @PostMapping("/import")
+    public Item importItem(@RequestBody @Valid ItemImportRequest request) {
+        return service.createFromUrl(request.getUrl());
+    }
 
     @PostMapping
     public Item create(@RequestBody @Valid Item item) {

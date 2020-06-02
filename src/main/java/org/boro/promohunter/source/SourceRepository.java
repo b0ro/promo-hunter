@@ -16,5 +16,5 @@ interface SourceRepository extends JpaRepository<Source, Integer> {
     @EntityGraph("source-graph")
     Page<Source> findAll(Pageable pageable);
 
-    Optional<Source> findByUrl(String url);
+    Optional<Source> findByUrlStartingWith(String url);
 }

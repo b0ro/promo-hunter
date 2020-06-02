@@ -32,6 +32,10 @@ ext {
     set('wavefrontVersion', "2.0.0-RC1")
 }
 
+// @todo make url source and item unique
+// @todo add endpoint to import items from url
+// @todo add verify/check source endpoint
+// @todo make source url endslash agnostic?
 // @todo check properties from seachange project
 // @todo add tests
 // @todo add rest error advice

@@ -1,6 +1,9 @@
 package org.boro.promohunter.source;
 
 import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.item.Item;
+import org.boro.promohunter.item.ItemImporter;
+import org.boro.promohunter.item.ItemImporterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -23,6 +26,13 @@ import java.util.List;
 class SourceController {
 
     private final SourceService service;
+    private final ItemImporter importer;
+
+    @PostMapping("/check")
+    public Item check(@RequestBody @Valid CheckSourceRequest request) {
+        return importer.importItem(request.getUrl(), request.getSource())
+                .orElseThrow(ItemImporterException::new);
+    }
 
     @PostMapping
     public Source create(@RequestBody @Valid Source source) {
