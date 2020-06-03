@@ -1,6 +1,10 @@
-package org.boro.promohunter.bundle;
+package org.boro.promohunter.adapters.api.item;
 
 import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.item.Item;
+import org.boro.promohunter.item.ItemImportRequest;
+import org.boro.promohunter.item.ItemImporter;
+import org.boro.promohunter.item.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,39 +23,40 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/bundles")
-class BundleController {
+@RequestMapping("/items")
+class ItemController {
 
-    private final BundleService service;
+    private final ItemService service;
+    private final ItemImporter importer;
+
+    @PostMapping("/import")
+    public Item importItem(@RequestBody @Valid ItemImportRequest request) {
+        return service.createFromUrl(request.getUrl());
+    }
 
     @PostMapping
-    public Bundle create(@RequestBody @Valid Bundle bundle) {
-        return service.create(bundle);
+    public Item create(@RequestBody @Valid Item item) {
+        return service.create(item);
     }
 
     @GetMapping("/{id}")
-    public Bundle findOne(@PathVariable int id) {
+    public Item findOne(@PathVariable int id) {
         return service.findOne(id);
     }
 
     @GetMapping("/all")
-    public List<Bundle> getAll() {
+    public List<Item> getAll() {
         return service.getAll();
     }
 
     @GetMapping
-    public Page<Bundle> getAllPaged(Pageable pageable) {
+    public Page<Item> getAllPaged(Pageable pageable) {
         return service.getAll(pageable);
     }
 
     @PutMapping("/{id}")
-    public Bundle update(@PathVariable int id, @RequestBody @Valid Bundle bundle) {
-        return service.update(id, bundle);
-    }
-
-    @PutMapping("/{bundleId}/items/{itemId}")
-    public Bundle assignItem(@PathVariable int bundleId, @PathVariable int itemId) {
-        return service.assignItemToBundle(itemId, bundleId);
+    public Item update(@PathVariable int id, @RequestBody @Valid Item item) {
+        return service.update(id, item);
     }
 
     @DeleteMapping("/{id}")

@@ -1,6 +1,12 @@
-package org.boro.promohunter.item;
+package org.boro.promohunter.adapters.api;
 
 import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.item.Item;
+import org.boro.promohunter.item.ItemImporter;
+import org.boro.promohunter.item.ItemImporterException;
+import org.boro.promohunter.source.CheckSourceRequest;
+import org.boro.promohunter.source.Source;
+import org.boro.promohunter.source.SourceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,40 +25,41 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/items")
-class ItemController {
+@RequestMapping("/sources")
+class SourceController {
 
-    private final ItemService service;
+    private final SourceService service;
     private final ItemImporter importer;
 
-    @PostMapping("/import")
-    public Item importItem(@RequestBody @Valid ItemImportRequest request) {
-        return service.createFromUrl(request.getUrl());
+    @PostMapping("/check")
+    public Item check(@RequestBody @Valid CheckSourceRequest request) {
+        return importer.importItem(request.getUrl(), request.getSource())
+                .orElseThrow(ItemImporterException::new);
     }
 
     @PostMapping
-    public Item create(@RequestBody @Valid Item item) {
-        return service.create(item);
+    public Source create(@RequestBody @Valid Source source) {
+        return service.create(source);
     }
 
     @GetMapping("/{id}")
-    public Item findOne(@PathVariable int id) {
+    public Source findOne(@PathVariable int id) {
         return service.findOne(id);
     }
 
     @GetMapping("/all")
-    public List<Item> getAll() {
+    public List<Source> getAll() {
         return service.getAll();
     }
 
     @GetMapping
-    public Page<Item> getAllPaged(Pageable pageable) {
+    public Page<Source> getAllPaged(Pageable pageable) {
         return service.getAll(pageable);
     }
 
     @PutMapping("/{id}")
-    public Item update(@PathVariable int id, @RequestBody @Valid Item item) {
-        return service.update(id, item);
+    public Source update(@PathVariable int id, @RequestBody @Valid Source source) {
+        return service.update(id, source);
     }
 
     @DeleteMapping("/{id}")

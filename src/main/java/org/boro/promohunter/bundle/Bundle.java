@@ -5,7 +5,6 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.boro.jpa.AuditableEntity;
 import org.boro.promohunter.item.Item;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -17,7 +16,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OrderBy;
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,12 +35,20 @@ import java.util.Set;
                                 @NamedAttributeNode("priceUpdates")})})
 public class Bundle extends AuditableEntity {
 
-    @NotBlank
-    @Length(min = 3, max = 255)
     private String name;
 
     @Column(columnDefinition = "text")
     private String description;
+
+    public static Bundle of(String name, String description) {
+        return new Bundle(name, description);
+    }
+
+    // @todo add builder after extracting entity
+    public Bundle(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
 
     @OrderBy("id")
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})

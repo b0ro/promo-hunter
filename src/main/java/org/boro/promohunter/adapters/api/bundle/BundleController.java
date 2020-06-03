@@ -1,9 +1,6 @@
-package org.boro.promohunter.source;
+package org.boro.promohunter.adapters.api.bundle;
 
 import lombok.RequiredArgsConstructor;
-import org.boro.promohunter.item.Item;
-import org.boro.promohunter.item.ItemImporter;
-import org.boro.promohunter.item.ItemImporterException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -22,46 +19,45 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sources")
-class SourceController {
+@RequestMapping("/bundles")
+class BundleController {
 
-    private final SourceService service;
-    private final ItemImporter importer;
-
-    @PostMapping("/check")
-    public Item check(@RequestBody @Valid CheckSourceRequest request) {
-        return importer.importItem(request.getUrl(), request.getSource())
-                .orElseThrow(ItemImporterException::new);
-    }
+    private final BundleApiService apiService;
 
     @PostMapping
-    public Source create(@RequestBody @Valid Source source) {
-        return service.create(source);
+    public BundleResponse create(@RequestBody @Valid BundleRequest request) {
+        return apiService.create(request);
     }
 
     @GetMapping("/{id}")
-    public Source findOne(@PathVariable int id) {
-        return service.findOne(id);
+    public BundleResponse findOne(@PathVariable int id) {
+        return apiService.findOne(id);
     }
 
     @GetMapping("/all")
-    public List<Source> getAll() {
-        return service.getAll();
+    public List<BundleResponse> getAll() {
+        return apiService.getAll();
     }
 
     @GetMapping
-    public Page<Source> getAllPaged(Pageable pageable) {
-        return service.getAll(pageable);
+    public Page<BundleResponse> getAllPaged(Pageable pageable) {
+        return apiService.getAll(pageable);
     }
 
     @PutMapping("/{id}")
-    public Source update(@PathVariable int id, @RequestBody @Valid Source source) {
-        return service.update(id, source);
+    public BundleResponse update(@PathVariable int id, @RequestBody @Valid BundleRequest request) {
+        return apiService.update(id, request);
+    }
+
+    @PutMapping("/{bundleId}/items/{itemId}")
+    public BundleWithItemsResponse assignItem(@PathVariable int bundleId, @PathVariable int itemId) {
+        return apiService.assignItemToBundle(itemId, bundleId);
+
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable int id) {
-        service.delete(id);
+        apiService.delete(id);
     }
 }
