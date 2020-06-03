@@ -10,6 +10,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
@@ -39,6 +40,8 @@ public class Item extends AuditableEntity {
     @NotBlank
     @Length(min = 3, max = 255)
     private String name;
+
+    @Column(columnDefinition = "text")
     private String description;
 
     @URL

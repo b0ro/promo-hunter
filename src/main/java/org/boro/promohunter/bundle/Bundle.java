@@ -8,6 +8,7 @@ import org.boro.promohunter.item.Item;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -39,6 +40,8 @@ public class Bundle extends AuditableEntity {
     @NotBlank
     @Length(min = 3, max = 255)
     private String name;
+
+    @Column(columnDefinition = "text")
     private String description;
 
     @OrderBy("id")

@@ -8,6 +8,7 @@ import org.boro.promohunter.item.Item;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
@@ -36,6 +37,8 @@ public class Source extends AuditableEntity {
     @NotBlank
     @Length(min = 3, max = 255)
     private String name;
+
+    @Column(columnDefinition = "text")
     private String description;
 
     @URL
