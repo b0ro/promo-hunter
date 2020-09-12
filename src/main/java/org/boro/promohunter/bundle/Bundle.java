@@ -40,22 +40,43 @@ public class Bundle extends AuditableEntity {
     @Column(columnDefinition = "text")
     private String description;
 
-    public static Bundle of(String name, String description) {
-        return new Bundle(name, description);
-    }
-
-    // @todo add builder after extracting entity
-    public Bundle(String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     @OrderBy("id")
     @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "bundle_item",
             joinColumns = @JoinColumn(name = "bundle_id"),
             inverseJoinColumns = @JoinColumn(name = "item_id"))
     private Set<Item> items = new HashSet<>();
+
+    public static Bundle of(String name, String description) {
+        return new Bundle(name, description);
+    }
+
+    public static Bundle of(int id, String name, String description) {
+        return new Bundle(id, name, description);
+    }
+
+    public static Bundle of(int id, String name, String description, Set<Item> items) {
+        return new Bundle(id, name, description, items);
+    }
+
+    // @todo add builder after extracting entity
+    Bundle(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
+    Bundle(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    Bundle(int id, String name, String description, Set<Item> items) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.items = items;
+    }
 
     public void updateFrom(Bundle bundle) {
         setName(bundle.getName());

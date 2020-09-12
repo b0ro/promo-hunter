@@ -10,12 +10,12 @@ import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
 @NoArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
-@JsonIgnoreProperties({"id", "lastModifiedAt"})
 public class PriceUpdate extends AuditableEntity {
 
     @DecimalMin("0.0")
@@ -24,5 +24,10 @@ public class PriceUpdate extends AuditableEntity {
 
     public PriceUpdate(BigDecimal value) {
         this.value = value;
+    }
+
+    public PriceUpdate(BigDecimal value, LocalDateTime createdAt) {
+        this.value = value;
+        this.createdAt = createdAt;
     }
 }

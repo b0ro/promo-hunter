@@ -1,6 +1,8 @@
 package org.boro.promohunter.adapters.api.bundle;
 
 import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.adapters.api.bundle.dto.BundleRequest;
+import org.boro.promohunter.adapters.api.bundle.dto.BundleResource;
 import org.boro.promohunter.bundle.BundleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,35 +17,36 @@ class BundleApiService {
 
     private final BundleService service;
 
-    public BundleResponse create(BundleRequest request) {
-        var bundle = service.create(request.asBundle());
-        return BundleResponse.of(bundle);
+    public BundleResource create(BundleRequest request) {
+        var bundle = service.create(request.bundle());
+        return BundleResource.of(bundle);
     }
 
-    public BundleResponse findOne(int id) {
-        return BundleResponse.of(service.findOne(id));
+    public BundleResource findOne(int id) {
+        var bundle = service.findOne(id);
+        return BundleResource.of(bundle);
     }
 
-    public List<BundleResponse> getAll() {
+    public List<BundleResource> getAll() {
         return service.getAll()
                 .stream()
-                .map(BundleResponse::of)
+                .map(BundleResource::of)
                 .collect(Collectors.toList());
     }
 
-    public Page<BundleResponse> getAll(Pageable pageable) {
+    public Page<BundleResource> getAll(Pageable pageable) {
         return service.getAll(pageable)
-                .map(BundleResponse::of);
+                .map(BundleResource::of);
     }
 
-    public BundleResponse update(int id, BundleRequest request) {
-        var bundle = service.update(id, request.asBundle());
-        return BundleResponse.of(bundle);
+    public BundleResource update(int id, BundleRequest request) {
+        var bundle = service.update(id, request.bundle());
+        return BundleResource.of(bundle);
     }
 
-    public BundleWithItemsResponse assignItemToBundle(int itemId, int bundleId) {
+    public BundleResource assignItemToBundle(int itemId, int bundleId) {
         var bundle = service.assignItemToBundle(itemId, bundleId);
-        return BundleWithItemsResponse.of(bundle);
+        return BundleResource.of(bundle);
     }
 
     public void delete(int id) {

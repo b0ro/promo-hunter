@@ -19,7 +19,7 @@ public class ItemImporter {
 
     public Optional<Item> importItem(String url, Source source) {
         try {
-            var item = new Item(url, source);
+            var item = Item.of(url, source);
             var document = Jsoup.connect(url).get();
 
             // @todo throw exception when cannot extract

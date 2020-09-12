@@ -1,13 +1,10 @@
 package org.boro.promohunter.item;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.boro.jpa.AuditableEntity;
 import org.boro.promohunter.source.Source;
-import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.URL;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -19,10 +16,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Digits;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
@@ -37,24 +30,15 @@ import java.util.Set;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class Item extends AuditableEntity {
 
-    @NotBlank
-    @Length(min = 3, max = 255)
     private String name;
 
     @Column(columnDefinition = "text")
     private String description;
 
-    @URL
-    @NotBlank
-    @Length(min = 3, max = 255)
     private String url;
 
-    @NotNull
-    @DecimalMin("0.0")
-    @Digits(integer = 13, fraction = 4)
     private BigDecimal price;
 
-    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "source_id", nullable = false)
     private Source source;
@@ -66,9 +50,43 @@ public class Item extends AuditableEntity {
             orphanRemoval = true)
     private Set<PriceUpdate> priceUpdates = new HashSet<>();
 
-    public Item(String url, Source source) {
+    public static Item of(int id, String name, String description) {
+        return new Item(id, name, description);
+    }
+
+    public static Item of(String name, Source source) {
+        return new Item(name, source);
+    }
+
+    public static Item of(String name, String description, String url, BigDecimal price) {
+        return new Item(name, description, url, price);
+    }
+
+    public static Item of(int id, String name, String description, String url, BigDecimal price) {
+        return new Item(id, name, description, url, price);
+    }
+
+    Item(int id, String name, String description) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+    }
+
+    Item(String url, Source source) {
         this.url = url;
         this.source = source;
+    }
+
+    Item(String name, String description, String url, BigDecimal price) {
+        this.name = name;
+        this.description = description;
+        this.url = url;
+        setPrice(price);
+    }
+
+    Item(int id, String name, String description, String url, BigDecimal price) {
+        this(name, description, url, price);
+        this.id = id;
     }
 
     public void updateFrom(Item item) {

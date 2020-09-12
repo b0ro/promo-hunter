@@ -1,4 +1,4 @@
-package org.boro.promohunter.adapters.api;
+package org.boro.promohunter.adapters.api.source;
 
 import lombok.RequiredArgsConstructor;
 import org.boro.promohunter.item.Item;

@@ -1,14 +1,13 @@
-package org.boro.promohunter.item;
+package org.boro.promohunter.adapters.api.item.dto;
 
-import lombok.Data;
 import lombok.Value;
 import org.hibernate.validator.constraints.URL;
 
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Value(staticConstructor = "of")
 public class ItemImportRequest {
     @URL
     @NotBlank
-    private String url;
+    String url;
 }
