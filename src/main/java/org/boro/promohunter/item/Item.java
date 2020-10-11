@@ -6,12 +6,14 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.boro.jpa.AuditableEntity;
 import org.boro.promohunter.source.Source;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.URL;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
@@ -39,6 +41,8 @@ public class Item extends AuditableEntity {
     @NotBlank
     @Length(min = 3, max = 255)
     private String name;
+
+    @Column(columnDefinition = "text")
     private String description;
 
     @URL
@@ -51,17 +55,22 @@ public class Item extends AuditableEntity {
     @Digits(integer = 13, fraction = 4)
     private BigDecimal price;
 
-    @JsonIgnore
     @ManyToOne
+    @JsonIgnore
+    @BatchSize(size = 100)
     @JoinColumn(name = "source_id", nullable = false)
     private Source source;
 
     @OrderBy("id")
+    @BatchSize(size = 100)
+    @Fetch(value = FetchMode.SELECT)
     @JoinColumn(name = "item_id")
-    @OneToMany(cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY,
-            orphanRemoval = true)
+    @OneToMany
     private Set<PriceUpdate> priceUpdates = new HashSet<>();
+
+    public Item(int id) {
+        this.id = id;
+    }
 
     public Item(String url, Source source) {
         this.url = url;

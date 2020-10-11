@@ -12,7 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 @Getter
 @MappedSuperclass
@@ -26,8 +26,8 @@ public abstract class AuditableEntity {
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
-    protected LocalDateTime createdAt;
+    protected LocalDate createdAt;
 
     @LastModifiedDate
-    protected LocalDateTime lastModifiedAt;
+    protected LocalDate lastModifiedAt;
 }

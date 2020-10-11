@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 @Data
 @Entity
@@ -24,5 +25,11 @@ public class PriceUpdate extends AuditableEntity {
 
     public PriceUpdate(BigDecimal value) {
         this.value = value;
+    }
+
+    public PriceUpdate(int id, BigDecimal value, LocalDate createdAt) {
+        this(value);
+        this.id = id;
+        this.createdAt = createdAt;
     }
 }

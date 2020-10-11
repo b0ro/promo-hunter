@@ -1,17 +1,22 @@
 package org.boro.promohunter.item;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.boro.jpa.ExtendedJpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-interface ItemRepository extends JpaRepository<Item, Integer> {
+interface ItemRepository extends ExtendedJpaRepository<Item, Integer> {
 
+    @Override
     @EntityGraph("item-graph")
     List<Item> findAll();
 
+    @Override
     @EntityGraph("item-graph")
-    Page<Item> findAll(Pageable pageable);
+    List<Item> findAllById(Iterable<Integer> ids);
+
+    @Override
+    @EntityGraph("item-graph")
+    Optional<Item> findById(Integer id);
 }

@@ -19,6 +19,8 @@ class ItemPriceSynchronizer {
     @Scheduled(cron = "${promohunter.itempricesynchronizer.cron}")
     public void synchronizePrices() {
         log.info("Started synchronization");
+
+        // @TODO don't fetch all items, use stream instead
         repository.findAll().forEach(this::synchronizePrice);
         log.info("Finished synchronization");
     }

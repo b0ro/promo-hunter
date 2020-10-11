@@ -1,17 +1,22 @@
 package org.boro.promohunter.bundle;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.boro.jpa.ExtendedJpaRepository;
 import org.springframework.data.jpa.repository.EntityGraph;
-import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
-interface BundleRepository extends JpaRepository<Bundle, Integer> {
+interface BundleRepository extends ExtendedJpaRepository<Bundle, Integer> {
 
+    @Override
     @EntityGraph("bundle-graph")
     List<Bundle> findAll();
 
+    @Override
     @EntityGraph("bundle-graph")
-    Page<Bundle> findAll(Pageable pageable);
+    List<Bundle> findAllById(Iterable<Integer> ids);
+
+    @Override
+    @EntityGraph("bundle-graph")
+    Optional<Bundle> findById(Integer id);
 }
