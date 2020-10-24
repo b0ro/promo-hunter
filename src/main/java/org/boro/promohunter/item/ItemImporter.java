@@ -15,7 +15,7 @@ import java.util.Optional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-class ItemImporter {
+public class ItemImporter {
 
     public Optional<Item> importItem(String url, Source source) {
         try {
