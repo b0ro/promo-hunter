@@ -1,23 +1,47 @@
 package org.boro.promohunter.source;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface SourceService {
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class SourceService {
 
-    Source create(Source item);
+    private final SourceRepository repository;
 
-    Source findOne(int id);
+    public Source create(Source source) {
+        return repository.save(source);
+    }
 
-    List<Source> getAll();
+    public Source findOne(int id) {
+        return repository.findById(id).orElseThrow(() -> SourceNotFoundException.withId(id));
+    }
 
-    Page<Source> getAll(Pageable pageable);
+    public List<Source> getAll() {
+        return repository.findAll();
+    }
 
-    Source update(int id, Source source);
+    public Page<Source> getAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
 
-    void delete(int id);
+    public Source update(int id, Source source) {
+        var entity = findOne(id);
+        entity.updateFrom(source);
+        return repository.save(entity);
+    }
 
-    Source findByUrl(String url);
+    public void delete(int id) {
+        repository.delete(findOne(id));
+    }
+
+    public Source findByUrlStartingWith(String url) {
+        return repository.findByUrlStartingWith(url).orElseThrow(() -> SourceNotFoundException.withUrl(url));
+    }
 }

@@ -1,23 +1,53 @@
 package org.boro.promohunter.bundle;
 
+import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.item.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
-public interface BundleService {
+@Service
+@Transactional
+@RequiredArgsConstructor
+public class BundleService {
 
-    Bundle create(Bundle item);
+    private final BundleRepository repository;
+    private final ItemService itemService;
 
-    Bundle findOne(int id);
+    public Bundle create(Bundle item) {
+        return repository.save(item);
+    }
 
-    List<Bundle> getAll();
+    public Bundle findOne(int id) {
+        return repository.findById(id).orElseThrow(() -> new BundleNotFoundException(id));
+    }
 
-    Page<Bundle> getAll(Pageable pageable);
+    public List<Bundle> getAll() {
+        return repository.findAll();
+    }
 
-    Bundle update(int id, Bundle item);
+    public Page<Bundle> getAll(Pageable pageable) {
+        return repository.findAll(pageable);
+    }
 
-    Bundle assignItemToBundle(int itemId, int bundleId);
+    public Bundle update(int id, Bundle bundle) {
+        var entity = findOne(id);
+        entity.updateFrom(bundle);
+        return repository.save(entity);
+    }
 
-    void delete(int id);
+    public Bundle assignItemToBundle(int itemId, int bundleId) {
+        var item = itemService.findOne(itemId);
+        var bundle = findOne(bundleId);
+        bundle.addItem(item);
+
+        return repository.save(bundle);
+    }
+
+    public void delete(int id) {
+        repository.delete(findOne(id));
+    }
 }

@@ -17,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
+import javax.persistence.OrderBy;
 import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -46,16 +47,16 @@ import java.util.stream.Collectors;
                 attributeNodes = {@NamedAttributeNode("priceUpdates")})})
 public class Bundle extends AuditableEntity {
 
-    private static final Comparator<PriceUpdate> PRICE_UPDATE_COMPARATOR = Comparator.comparing(PriceUpdate::getCreatedAt);
+    private static final Comparator<PriceUpdate> PRICE_UPDATE_COMPARATOR =
+            Comparator.comparing(PriceUpdate::getCreatedAt);
     private static final Random RANDOM_GENERATOR = new Random();
 
-    @NotBlank
-    @Length(min = 3, max = 255)
     private String name;
 
     @Column(columnDefinition = "text")
     private String description;
 
+    @OrderBy("id")
     @ManyToMany
     @JoinTable(
             name = "bundle_item",
@@ -65,6 +66,11 @@ public class Bundle extends AuditableEntity {
 
     public Bundle(LocalDate createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Bundle(String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     public void updateFrom(Bundle bundle) {

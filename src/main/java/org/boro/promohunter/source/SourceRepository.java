@@ -6,5 +6,5 @@ import java.util.Optional;
 
 interface SourceRepository extends JpaRepository<Source, Integer> {
 
-    Optional<Source> findByUrl(String url);
+    Optional<Source> findByUrlStartingWith(String url);
 }

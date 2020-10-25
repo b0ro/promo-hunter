@@ -1,6 +1,8 @@
-package org.boro.promohunter.source;
+package org.boro.promohunter.bundle.api;
 
 import lombok.RequiredArgsConstructor;
+import org.boro.promohunter.bundle.Bundle;
+import org.boro.promohunter.bundle.BundleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -19,34 +21,39 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/sources")
-class SourceController {
+@RequestMapping("/bundles")
+class BundleController {
 
-    private final SourceService service;
+    private final BundleService service;
 
     @PostMapping
-    public Source create(@RequestBody @Valid Source source) {
-        return service.create(source);
+    public Bundle create(@RequestBody @Valid BundleRequest request) {
+        return service.create(request.bundle());
     }
 
     @GetMapping("/{id}")
-    public Source findOne(@PathVariable int id) {
+    public Bundle findOne(@PathVariable int id) {
         return service.findOne(id);
     }
 
     @GetMapping("/all")
-    public List<Source> getAll() {
+    public List<Bundle> getAll() {
         return service.getAll();
     }
 
     @GetMapping
-    public Page<Source> getAllPaged(Pageable pageable) {
+    public Page<Bundle> getAllPaged(Pageable pageable) {
         return service.getAll(pageable);
     }
 
     @PutMapping("/{id}")
-    public Source update(@PathVariable int id, @RequestBody @Valid Source source) {
-        return service.update(id, source);
+    public Bundle update(@PathVariable int id, @RequestBody @Valid BundleRequest request) {
+        return service.update(id, request.bundle());
+    }
+
+    @PutMapping("/{bundleId}/items/{itemId}")
+    public Bundle assignItem(@PathVariable int bundleId, @PathVariable int itemId) {
+        return service.assignItemToBundle(itemId, bundleId);
     }
 
     @DeleteMapping("/{id}")
