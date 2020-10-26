@@ -1,5 +1,6 @@
 package org.boro.promohunter.item.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Value;
 import org.boro.promohunter.item.Item;
 import org.hibernate.validator.constraints.URL;
@@ -30,7 +31,8 @@ class ItemRequest {
     @Digits(integer = 13, fraction = 4)
     BigDecimal price;
 
-    public static ItemRequest of(String name, String description, String url, BigDecimal price) {
+    @JsonCreator
+    static ItemRequest of(String name, String description, String url, BigDecimal price) {
         return new ItemRequest(name, description, url, price);
     }
 

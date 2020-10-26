@@ -1,5 +1,6 @@
 package org.boro.promohunter.source.api;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Value;
 import org.boro.promohunter.source.Source;
 import org.boro.promohunter.source.validation.Selector;
@@ -36,6 +37,7 @@ class SourceRequest {
     @Selector(message = "Price selector must be valid CSS selector")
     String priceSelector;
 
+    @JsonCreator
     static SourceRequest of(String name, String description, String url, String nameSelector,
                             String descriptionSelector, String priceSelector) {
         return new SourceRequest(name, description, url, nameSelector, descriptionSelector, priceSelector);

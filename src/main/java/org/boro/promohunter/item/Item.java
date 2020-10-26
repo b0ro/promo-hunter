@@ -6,11 +6,11 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.boro.jpa.AuditableEntity;
 import org.boro.promohunter.source.Source;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedAttributeNode;
@@ -27,7 +27,9 @@ import java.util.Set;
 @NamedEntityGraph(
         name = "item-graph",
         attributeNodes = {
-                @NamedAttributeNode("priceUpdates")})
+                @NamedAttributeNode("priceUpdates")
+        }
+)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 public class Item extends AuditableEntity {
 
@@ -45,9 +47,12 @@ public class Item extends AuditableEntity {
     private Source source;
 
     @OrderBy("id")
-    @Fetch(value = FetchMode.SELECT)
     @JoinColumn(name = "item_id")
-    @OneToMany
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY,
+            orphanRemoval = true
+    )
     private Set<PriceUpdate> priceUpdates = new HashSet<>();
 
     public Item(int id) {

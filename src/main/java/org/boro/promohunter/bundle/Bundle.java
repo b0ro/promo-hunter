@@ -7,8 +7,8 @@ import lombok.Value;
 import org.boro.jpa.AuditableEntity;
 import org.boro.promohunter.item.Item;
 import org.boro.promohunter.item.PriceUpdate;
-import org.hibernate.validator.constraints.Length;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -18,7 +18,6 @@ import javax.persistence.NamedAttributeNode;
 import javax.persistence.NamedEntityGraph;
 import javax.persistence.NamedSubgraph;
 import javax.persistence.OrderBy;
-import javax.validation.constraints.NotBlank;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.Comparator;
@@ -41,10 +40,21 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = true)
 @NamedEntityGraph(
         name = "bundle-graph",
-        attributeNodes = {@NamedAttributeNode(value = "items", subgraph = "item-sub-graph")},
-        subgraphs = {@NamedSubgraph(
-                name = "item-sub-graph",
-                attributeNodes = {@NamedAttributeNode("priceUpdates")})})
+        attributeNodes = {
+                @NamedAttributeNode(
+                        value = "items",
+                        subgraph = "item-sub-graph"
+                )
+        },
+        subgraphs = {
+                @NamedSubgraph(
+                        name = "item-sub-graph",
+                        attributeNodes = {
+                                @NamedAttributeNode("priceUpdates")
+                        }
+                )
+        }
+)
 public class Bundle extends AuditableEntity {
 
     private static final Comparator<PriceUpdate> PRICE_UPDATE_COMPARATOR =
@@ -57,11 +67,23 @@ public class Bundle extends AuditableEntity {
     private String description;
 
     @OrderBy("id")
-    @ManyToMany
+    @ManyToMany(
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            }
+    )
     @JoinTable(
             name = "bundle_item",
-            joinColumns = @JoinColumn(name = "bundle_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "item_id", referencedColumnName = "id"))
+            joinColumns = @JoinColumn(
+                    name = "bundle_id",
+                    referencedColumnName = "id"
+            ),
+            inverseJoinColumns = @JoinColumn(
+                    name = "item_id",
+                    referencedColumnName = "id"
+            )
+    )
     private Set<Item> items = new HashSet<>();
 
     public Bundle(LocalDate createdAt) {
