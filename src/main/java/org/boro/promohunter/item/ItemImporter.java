@@ -24,7 +24,6 @@ public class ItemImporter {
             var item = new Item(url, source);
             var document = Jsoup.connect(url).get();
 
-            // @todo throw exception when cannot extract
             extract(document, source.getNameSelector()).ifPresent(item::setName);
             extract(document, source.getDescriptionSelector()).ifPresent(item::setDescription);
             extract(document, source.getPriceSelector()).ifPresent(priceText -> {
