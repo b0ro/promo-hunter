@@ -32,16 +32,6 @@ ext {
     set('wavefrontVersion', "2.0.0-RC1")
 }
 
-// @todo check properties from seachange project
-// @todo add tests
-// @todo add rest error advice
-// @todo add docker and docker-compose support with MariaDb image
-// @todo refactor to hexagonal architecture
-// @todo improve item, source, bundle validation
-// @todo refactor ItemPriceSynchronizer to use Stream instead of List (optional)
-// @todo add notification with the prices of sets? or when price changed or reached specific price
-// @todo add property sources and property metadata file
-// @todo add ci/cd support
 dependencies {
     // COMMON COMPONENTS
     // base services for management, configuration and discovery
