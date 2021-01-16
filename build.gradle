@@ -1,4 +1,5 @@
 plugins {
+    id 'jacoco'
     id 'org.sonarqube' version '3.0'
     id 'org.springframework.boot' version '2.3.0.RELEASE'
     id 'io.spring.dependency-management' version '1.0.9.RELEASE'
@@ -80,8 +81,16 @@ test {
 
 sonarqube {
     properties {
-        property "sonar.projectKey", "b0ro_promo-hunter"
-        property "sonar.organization", "b0ro"
-        property "sonar.host.url", "https://sonarcloud.io"
+        property 'sonar.projectKey', 'b0ro_promo-hunter'
+        property 'sonar.organization', 'b0ro'
+        property 'sonar.host.url', 'https://sonarcloud.io'
+        property 'sonar.sources', '.'
+        property 'sonar.inclusions', 'src/main/java/**,src/main/resources/**'
+    }
+}
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
     }
 }
