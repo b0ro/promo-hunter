@@ -5,6 +5,7 @@ plugins {
     id 'java'
 }
 
+sonarToken = System.getenv("SONAR_TOKEN")
 group = 'org.boro'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
@@ -83,5 +84,6 @@ sonarqube {
         property "sonar.projectKey", "b0ro_promo-hunter"
         property "sonar.organization", "b0ro"
         property "sonar.host.url", "https://sonarcloud.io"
+        property("sonar.login", "$sonarToken")
     }
 }
