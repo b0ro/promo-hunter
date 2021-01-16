@@ -5,7 +5,7 @@ plugins {
     id 'java'
 }
 
-sonarToken = System.getenv("SONAR_TOKEN")
+def sonarToken = System.getenv("SONAR_TOKEN")
 group = 'org.boro'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '11'
