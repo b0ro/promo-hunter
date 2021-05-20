@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.boro.promohunter.item.ItemService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -25,8 +26,8 @@ public class BundleService {
         return repository.findById(id).orElseThrow(() -> new BundleNotFoundException(id));
     }
 
-    public List<Bundle> getAll() {
-        return repository.findAll();
+    public List<Bundle> getAll(Sort sort) {
+        return repository.findAll(sort);
     }
 
     public Page<Bundle> getAll(Pageable pageable) {
