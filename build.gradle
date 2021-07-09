@@ -1,15 +1,16 @@
 plugins {
     id 'jacoco'
     id 'org.sonarqube' version '3.0'
-    id 'org.springframework.boot' version '2.3.0.RELEASE'
-    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'org.springframework.boot' version '2.5.2'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
     id 'java'
+    id 'com.coditory.integration-test' version '1.2.1'
 }
 
 group = 'org.boro'
 version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-targetCompatibility = '11'
+sourceCompatibility = '16'
+targetCompatibility = '16'
 
 // make application executable jar to register it as linux service
 bootJar {
@@ -47,10 +48,10 @@ dependencies {
     // support database access
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.flywaydb:flyway-core'
-    compile 'org.mariadb.jdbc:mariadb-java-client'
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // support web scraping
-    compile 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.jsoup:jsoup:1.13.1'
 
     // DEVELOPMENT HELPERS
     // use for development
@@ -63,10 +64,11 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // TESTING
-    testImplementation('org.springframework.boot:spring-boot-starter-test') {
-        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-    }
+    // TESTS
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // INTEGRATION TESTS
+    integrationRuntimeOnly 'com.h2database:h2'
 }
 
 dependencyManagement {
@@ -89,8 +91,24 @@ sonarqube {
     }
 }
 
+//jacocoTestReport {
+//    reports {
+//        xml.enabled true
+//    }
+//}
+
 jacocoTestReport {
+    executionData(fileTree(project.buildDir).include("jacoco/*.exec"))
     reports {
-        xml.enabled true
+        xml.enabled = true
+        html.enabled = true
+    }
+}
+
+tasks.withType(Test) {
+    useJUnitPlatform()
+    testLogging {
+        events = ["passed", "failed", "skipped"]
+        exceptionFormat = "full"
     }
 }

@@ -1,1 +1,1 @@
-RENAME TABLE `price` TO `price_update`;
+ALTER TABLE `price` RENAME TO `price_update`;
