@@ -5,6 +5,8 @@ import org.boro.promohunter.bundle.Bundle;
 import org.boro.promohunter.bundle.BundleService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.SortDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -37,8 +39,8 @@ class BundleController {
     }
 
     @GetMapping("/all")
-    public List<Bundle> getAll() {
-        return service.getAll();
+    public List<Bundle> getAll(@SortDefault(sort = "id", direction = Sort.Direction.ASC) Sort sort) {
+        return service.getAll(sort);
     }
 
     @GetMapping

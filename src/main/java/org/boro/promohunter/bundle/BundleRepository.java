@@ -1,6 +1,7 @@
 package org.boro.promohunter.bundle;
 
 import org.boro.jpa.ExtendedJpaRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 
 import java.util.List;
@@ -10,7 +11,7 @@ interface BundleRepository extends ExtendedJpaRepository<Bundle, Integer> {
 
     @Override
     @EntityGraph("bundle-graph")
-    List<Bundle> findAll();
+    List<Bundle> findAll(Sort sort);
 
     @Override
     @EntityGraph("bundle-graph")
