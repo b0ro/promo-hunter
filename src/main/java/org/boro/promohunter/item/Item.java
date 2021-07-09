@@ -9,6 +9,7 @@ import org.boro.promohunter.source.Source;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
@@ -47,7 +48,7 @@ public class Item extends AuditableEntity {
     @OrderBy("id")
     @Fetch(value = FetchMode.SELECT)
     @JoinColumn(name = "item_id")
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     private Set<PriceUpdate> priceUpdates = new HashSet<>();
 
     public Item(int id) {
