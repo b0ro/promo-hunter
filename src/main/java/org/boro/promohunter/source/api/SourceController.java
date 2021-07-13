@@ -1,13 +1,13 @@
 package org.boro.promohunter.source.api;
 
 import lombok.RequiredArgsConstructor;
-import org.boro.promohunter.item.Item;
 import org.boro.promohunter.item.ItemImporter;
 import org.boro.promohunter.item.ItemImporterException;
-import org.boro.promohunter.source.Source;
 import org.boro.promohunter.source.SourceService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,34 +30,37 @@ class SourceController {
     private final ItemImporter importer;
 
     @PostMapping("/check")
-    public Item check(@RequestBody @Valid CheckSourceRequest request) {
-        return importer.importItem(request.getUrl(), request.getSource().source())
+    public CheckSourceResponse check(@RequestBody @Valid CheckSourceRequest request) {
+        var item = importer.importItem(request.getUrl(), request.getSource().source())
                 .orElseThrow(ItemImporterException::new);
+        return CheckSourceResponse.of(item);
     }
 
     @PostMapping
-    public Source create(@RequestBody @Valid SourceRequest request) {
-        return service.create(request.source());
+    public SourceResponse create(@RequestBody @Valid SourceRequest request) {
+        var source = service.create(request.source());
+        return SourceResponse.of(source);
     }
 
     @GetMapping("/{id}")
-    public Source findOne(@PathVariable int id) {
-        return service.findOne(id);
-    }
-
-    @GetMapping("/all")
-    public List<Source> getAll() {
-        return service.getAll();
+    public SourceResponse findOne(@PathVariable int id) {
+        var source = service.findOne(id);
+        return SourceResponse.of(source);
     }
 
     @GetMapping
-    public Page<Source> getAllPaged(Pageable pageable) {
-        return service.getAll(pageable);
+    public Page<SourceResponse> getAllPaged(
+            @PageableDefault(sort = "id", direction = Sort.Direction.DESC)
+            Pageable pageable
+    ) {
+        return service.getAll(pageable)
+                .map(SourceResponse::of);
     }
 
     @PutMapping("/{id}")
-    public Source update(@PathVariable int id, @RequestBody @Valid SourceRequest request) {
-        return service.update(id, request.source());
+    public SourceResponse update(@PathVariable int id, @RequestBody @Valid SourceRequest request) {
+        var source = service.update(id, request.source());
+        return SourceResponse.of(source);
     }
 
     @DeleteMapping("/{id}")

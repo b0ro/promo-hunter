@@ -14,7 +14,7 @@ class ItemImportRequest {
     @Size(min = 3, max = 255, message = "Item url must be between {min} and {max} characters long")
     String url;
 
-    public static ItemImportRequest of(String url) {
+    static ItemImportRequest of(String url) {
         return new ItemImportRequest(url);
     }
 }

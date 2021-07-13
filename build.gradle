@@ -31,9 +31,13 @@ repositories {
     mavenCentral()
     maven { url 'https://repo.spring.io/milestone' }
 }
-ext {
-    set('wavefrontVersion', "2.0.0-RC1")
-}
+
+project.ext.versions = [
+        wavefront                  : '2.0.0-RC1',
+        jsoup                      : '1.13.1',
+        restAssured                : '4.4.0',
+        springCloudContractWiremock: '2.2.7.RELEASE'
+]
 
 dependencies {
     // COMMON COMPONENTS
@@ -51,7 +55,7 @@ dependencies {
     runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
     // support web scraping
-    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation "org.jsoup:jsoup:${versions.jsoup}"
 
     // DEVELOPMENT HELPERS
     // use for development
@@ -61,19 +65,24 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    testCompileOnly 'org.projectlombok:lombok'
-    testAnnotationProcessor 'org.projectlombok:lombok'
-
     // TESTS
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+
     // INTEGRATION TESTS
     integrationRuntimeOnly 'com.h2database:h2'
+    integrationImplementation "io.rest-assured:rest-assured:${versions.restAssured}"
+    integrationImplementation "org.springframework.cloud:spring-cloud-contract-wiremock:${versions.springCloudContractWiremock}"
+
+    integrationCompileOnly 'org.projectlombok:lombok'
+    integrationAnnotationProcessor 'org.projectlombok:lombok'
 }
 
 dependencyManagement {
     imports {
-        mavenBom "com.wavefront:wavefront-spring-boot-bom:${wavefrontVersion}"
+        mavenBom "com.wavefront:wavefront-spring-boot-bom:${versions.wavefront}"
     }
 }
 
@@ -91,12 +100,7 @@ sonarqube {
     }
 }
 
-//jacocoTestReport {
-//    reports {
-//        xml.enabled true
-//    }
-//}
-
+// @todo verify if jacoco reports are correct with the configuration below
 jacocoTestReport {
     executionData(fileTree(project.buildDir).include("jacoco/*.exec"))
     reports {
