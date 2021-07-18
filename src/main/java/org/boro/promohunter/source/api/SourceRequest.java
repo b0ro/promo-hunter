@@ -9,7 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
-@Value
+@Value(staticConstructor = "of")
 class SourceRequest {
 
     @NotBlank(message = "Source name must not be blank")
@@ -35,11 +35,6 @@ class SourceRequest {
     @Size(max = 255, message = "Source price selector must be up to {max} characters long")
     @Selector(message = "Price selector must be valid CSS selector")
     String priceSelector;
-
-    static SourceRequest of(String name, String description, String url, String nameSelector,
-                            String descriptionSelector, String priceSelector) {
-        return new SourceRequest(name, description, url, nameSelector, descriptionSelector, priceSelector);
-    }
 
     Source source() {
         return new Source(name, description, url, nameSelector, descriptionSelector, priceSelector);

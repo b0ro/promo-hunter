@@ -23,8 +23,7 @@ public class ItemService {
 
     public Item create(Item item) {
         try {
-            var url = new URL(item.getUrl());
-            var domain = String.format("%s://%s", url.getProtocol(), url.getHost());
+            var domain = getDomainFromUrl(item.getUrl());
             var source = sourceService.findByUrlStartingWith(domain);
 
             item.setSource(source);

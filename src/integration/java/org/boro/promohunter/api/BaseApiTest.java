@@ -6,6 +6,7 @@ import io.restassured.filter.log.ErrorLoggingFilter;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.boro.PromohunterApplication;
 import org.boro.promohunter.config.IntegrationConfiguration;
 import org.boro.promohunter.infrastructure.DatabaseCleanup;
@@ -62,5 +63,17 @@ public abstract class BaseApiTest {
 
     public static JSONObject asJSONObject(String json) throws JSONException {
         return new JSONObject(json);
+    }
+
+    public String extractId(Response response) {
+        return response.path("id").toString();
+    }
+
+    public Double extractPrice(Response response) {
+        return extractPrice(response, "price");
+    }
+
+    public Double extractPrice(Response response, String path) {
+        return Double.parseDouble(response.path(path).toString());
     }
 }

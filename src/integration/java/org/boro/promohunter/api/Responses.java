@@ -1,4 +1,4 @@
-package org.boro.promohunter.api.source;
+package org.boro.promohunter.api;
 
 public final class Responses {
 

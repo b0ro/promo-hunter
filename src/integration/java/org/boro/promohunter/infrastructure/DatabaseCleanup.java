@@ -19,8 +19,12 @@ public class DatabaseCleanup {
         entityManager.flush();
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY FALSE").executeUpdate();
 
+        if (tableNames.isEmpty()) {
+            log.info("No database tables to truncate found");
+        } else {
+            log.info("Truncating database tables: {}", tableNames);
+        }
         for (final String tableName : tableNames) {
-            log.info("Truncating database table: {}", tableName);
             entityManager.createNativeQuery("TRUNCATE TABLE " + tableName).executeUpdate();
         }
         entityManager.createNativeQuery("SET REFERENTIAL_INTEGRITY TRUE").executeUpdate();

@@ -17,22 +17,22 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.givenThat;
 import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.boro.promohunter.api.source.ApiCalls.checkSourceSelectorsWith;
-import static org.boro.promohunter.api.source.ApiCalls.createSourceFrom;
-import static org.boro.promohunter.api.source.ApiCalls.deleteSourceWith;
-import static org.boro.promohunter.api.source.ApiCalls.getSourceWith;
-import static org.boro.promohunter.api.source.ApiCalls.listSources;
-import static org.boro.promohunter.api.source.ApiCalls.updateSourceWith;
-import static org.boro.promohunter.api.source.Requests.BOTLAND_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.CHECK_BOTLAND_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.CHECK_MORELE_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.CHECK_XKOM_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.MORELE_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.NEW_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Requests.XKOM_SOURCE_REQUEST;
-import static org.boro.promohunter.api.source.Responses.CHECK_BOTLAND_SOURCE_RESPONSE;
-import static org.boro.promohunter.api.source.Responses.CHECK_MORELE_SOURCE_RESPONSE;
-import static org.boro.promohunter.api.source.Responses.CHECK_XKOM_SOURCE_RESPONSE;
+import static org.boro.promohunter.api.ApiCalls.checkSourceSelectorsWith;
+import static org.boro.promohunter.api.ApiCalls.createSourceFrom;
+import static org.boro.promohunter.api.ApiCalls.deleteSourceWith;
+import static org.boro.promohunter.api.ApiCalls.getSourceWith;
+import static org.boro.promohunter.api.ApiCalls.listSources;
+import static org.boro.promohunter.api.ApiCalls.updateSourceWith;
+import static org.boro.promohunter.api.Requests.BOTLAND_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.CHECK_BOTLAND_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.CHECK_MORELE_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.CHECK_XKOM_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.MORELE_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.NEW_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Requests.XKOM_SOURCE_REQUEST;
+import static org.boro.promohunter.api.Responses.CHECK_BOTLAND_SOURCE_RESPONSE;
+import static org.boro.promohunter.api.Responses.CHECK_MORELE_SOURCE_RESPONSE;
+import static org.boro.promohunter.api.Responses.CHECK_XKOM_SOURCE_RESPONSE;
 import static org.hamcrest.Matchers.equalTo;
 import static org.hamcrest.Matchers.notNullValue;
 
@@ -44,10 +44,10 @@ class SourceApiTest extends BaseApiTest {
         var request = asJSONObject(NEW_SOURCE_REQUEST);
 
         // when
-        var newSourceResponse = createSourceFrom(request);
+        var sourceResponse = createSourceFrom(request);
 
         // then
-        returnsCorrectSource(newSourceResponse, request);
+        returnsCorrectSource(sourceResponse, request);
     }
 
     @Test
@@ -56,16 +56,13 @@ class SourceApiTest extends BaseApiTest {
         var request = asJSONObject(NEW_SOURCE_REQUEST);
 
         // and
-        var newSourceResponse = createSourceFrom(request);
+        var sourceResponse = createSourceFrom(request);
 
         // when
-        String id = extractId(newSourceResponse);
+        String id = extractId(sourceResponse);
         var fetchedSourceResponse = getSourceWith(id);
 
         // then
-        returnsCorrectSource(newSourceResponse, request);
-
-        // and
         returnsCorrectSource(fetchedSourceResponse, request);
     }
 
@@ -180,14 +177,7 @@ class SourceApiTest extends BaseApiTest {
         );
     }
 
-    String extractId(Response response) {
-        return response.path("id").toString();
-    }
-    Double extractPrice(Response response) {
-        return Double.parseDouble(response.path("price").toString());
-    }
-
-    void returnsCorrectSource(Response response, JSONObject source ) throws JSONException {
+    void returnsCorrectSource(Response response, JSONObject source) throws JSONException {
         response.then()
             .statusCode(200)
             .body("id", notNullValue())

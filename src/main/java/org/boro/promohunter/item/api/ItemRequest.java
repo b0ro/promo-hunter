@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 
-@Value
+@Value(staticConstructor = "of")
 class ItemRequest {
 
     @NotBlank(message = "Item name must not be blank")
@@ -29,10 +29,6 @@ class ItemRequest {
     @DecimalMin("0.0")
     @Digits(integer = 13, fraction = 4)
     BigDecimal price;
-
-    public static ItemRequest of(String name, String description, String url, BigDecimal price) {
-        return new ItemRequest(name, description, url, price);
-    }
 
     Item item() {
         return new Item(name, description, url, price);

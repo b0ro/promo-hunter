@@ -5,7 +5,7 @@ import org.boro.promohunter.source.Source;
 
 import java.time.LocalDate;
 
-@Value
+@Value(staticConstructor = "of")
 class SourceResponse {
 
     String id;
@@ -22,7 +22,7 @@ class SourceResponse {
     LocalDate lastModifiedAt;
 
     static SourceResponse of(Source source) {
-        return new SourceResponse(
+        return of(
                 String.valueOf(source.getId()),
                 source.getName(),
                 source.getDescription(),

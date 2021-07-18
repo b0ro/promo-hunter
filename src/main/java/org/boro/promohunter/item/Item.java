@@ -64,7 +64,7 @@ public class Item extends AuditableEntity {
         this.name = name;
         this.description = description;
         this.url = url;
-        this.price = price;
+        setPrice(price);
     }
 
     public void updateFrom(Item item) {
